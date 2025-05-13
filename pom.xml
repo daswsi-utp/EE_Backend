@@ -21,6 +21,15 @@
     <module>eureka-server</module>
     <module>config-server</module>
     <module>auth-service</module>
+    <module>client-service</module>
+    <module>product-service</module>
+    <module>report-service</module>
+    <module>order-pay-service</module>
+    <module>event-service</module>
+    <module>employee-service</module>
+    <module>content-service</module>
+    <module>chat-service</module>
+    <module>category-service</module>
   </modules>
 
   <properties>

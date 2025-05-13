@@ -6,10 +6,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="api-gateway" />
+        <module name="category-service" />
+        <module name="product-service" />
+        <module name="order-pay-service" />
+        <module name="chat-service" />
+        <module name="eureka-server" />
+        <module name="employee-service" />
         <module name="config-server" />
         <module name="auth-service" />
-        <module name="eureka-server" />
+        <module name="content-service" />
+        <module name="event-service" />
+        <module name="api-gateway" />
+        <module name="report-service" />
+        <module name="client-service" />
       </profile>
     </annotationProcessing>
   </component>
@@ -17,8 +26,17 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
       <module name="auth-service" options="-parameters" />
+      <module name="category-service" options="-parameters" />
+      <module name="chat-service" options="-parameters" />
+      <module name="client-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
+      <module name="content-service" options="-parameters" />
+      <module name="employee-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="event-service" options="-parameters" />
+      <module name="order-pay-service" options="-parameters" />
+      <module name="product-service" options="-parameters" />
+      <module name="report-service" options="-parameters" />
     </option>
   </component>
 </project>
