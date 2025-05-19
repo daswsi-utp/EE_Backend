@@ -23,6 +23,21 @@
     </div>
 </div>
 <script th:inline="javascript">
+    let socket = new WebSocket("ws://localhost:8080/chat");
+
+    socket.onmessage = function(event) {
+        let messageArea = document.getElementById("messageArea");
+        messageArea.innerHTML += '<p>' + event.data + '</p>';
+    }
+
+    function sendMessage() {
+        let username = document.getElementById("username");
+        let messageInput = document.getElementById("messageInput");
+
+        let fulMessage = username.value + ": " + messageInput.value;
+        socket.send(fulMessage);
+        messageInput.value = '';
+    }
 </script>
 </body>
 </html>
