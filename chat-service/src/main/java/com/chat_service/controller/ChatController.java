@@ -1,6 +1,5 @@
 package com.chat_service.controller;
 
-
 import com.chat_service.model.ChatMessage;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
