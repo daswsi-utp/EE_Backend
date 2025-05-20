@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat en Tiempo Real</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f1f1;
+            margin: 0;
+            padding: 0;
+        }
+
+        #chat-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+        }
+
+        #chat-box {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #chat-box p {
+            margin: 8px 0;
+            padding: 8px 12px;
+            border-radius: 12px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+        .message-left {
+            background-color: #e4e6eb;
+            align-self: flex-start;
+        }
+
+        .message-right {
+            background-color: #0084ff;
+            color: white;
+            align-self: flex-end;
+        }
+
+        #input-area {
+            display: flex;
+            padding: 10px;
+        }
+
+        #message {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        #sendBtn {
+            padding: 10px 15px;
+            margin-left: 10px;
+            background: #28a745;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="chat-container">
+    <div id="chat-box"></div>
+    <div id="input-area">
+        <input type="text" id="message" placeholder="Escribe un mensaje..." />
+        <button id="sendBtn" onclick="sendMessage()">Enviar</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<script>
+    let sender = prompt("Ingresa tu nombre de usuario:");
+    const socket = new SockJS('http://localhost:8083/chat-websocket');
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function () {
+        stompClient.subscribe('/topic/public', function (message) {
+            const msg = JSON.parse(message.body);
+            showMessage(msg);
+        });
+
+        stompClient.send("/app/chat.newUser", {}, JSON.stringify({
+            sender: sender,
+            type: 'JOIN'
+        }));
+    });
+
+    function sendMessage() {
+        const messageInput = document.getElementById('message');
+        const text = messageInput.value.trim();
+        if (text === '') return;
+
+        const chatMessage = {
+            sender: sender,
+            content: text,
+            type: 'CHAT'
+        };
+
+        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+        messageInput.value = '';
+    }
+
+    function showMessage(message) {
+        const chatBox = document.getElementById('chat-box');
+        const p = document.createElement('p');
+
+        if (message.type === 'JOIN' || message.type === 'LEAVE') {
+            p.textContent = message.content;
+            p.className = 'message-left';
+        } else {
+            p.textContent = message.sender + ": " + message.content;
+            p.className = message.sender === sender ? 'message-right' : 'message-left';
+        }
+
+        chatBox.appendChild(p);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+</body>
+</html>
