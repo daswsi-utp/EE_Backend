@@ -46,7 +46,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-
 		<!-- MySQL Connector -->
 		<dependency>
 			<groupId>com.mysql</groupId>
