@@ -3,6 +3,7 @@ package com.auth_service.controllers;
 import com.auth_service.dto.request.ChangePasswordRequest;
 import com.auth_service.dto.request.LoginRequest;
 import com.auth_service.dto.request.UserRequest;
+import com.auth_service.dto.response.RegisterResponse;
 import com.auth_service.dto.response.UserResponse;
 import com.auth_service.service.daoImpl.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +32,19 @@ public class AuthController {
         }
     }
 
-    //Registar un usuario
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<?> registerUser(@RequestBody UserRequest userRequest) {
         try {
-            String state = authService.register(userRequest);
-            return ResponseEntity.ok(state);
+            RegisterResponse response = authService.register(userRequest);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al registrar usuario: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error interno en el servidor"));
         }
     }
+
 
     //Jalar a todo los usuarios
     @GetMapping("/users")

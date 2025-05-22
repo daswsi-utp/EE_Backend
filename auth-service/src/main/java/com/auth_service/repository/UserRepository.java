@@ -12,4 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Verificar si un username ya existe (para prevenir duplicados en registro)
     boolean existsByUsername(String username);
+
+    // Verificar si un userCode ya existe (para evitar duplicados en generación)
+    boolean existsByUserCode(String userCode);
 }

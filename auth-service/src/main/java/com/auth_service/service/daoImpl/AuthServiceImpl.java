@@ -2,11 +2,13 @@ package com.auth_service.service.daoImpl;
 
 import com.auth_service.dto.request.ChangePasswordRequest;
 import com.auth_service.dto.request.UserRequest;
+import com.auth_service.dto.response.RegisterResponse;
 import com.auth_service.dto.response.UserResponse;
 import com.auth_service.model.User;
 import com.auth_service.repository.UserRepository;
 import com.auth_service.service.daoInter.AuthServiceDAO;
 import com.auth_service.utils.JwtUtil;
+import com.auth_service.utils.UserCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,9 @@ public class AuthServiceImpl implements AuthServiceDAO {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserCodeGenerator userCodeGenerator;
+
     @Override
     public String login(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
@@ -59,29 +64,33 @@ public class AuthServiceImpl implements AuthServiceDAO {
     }
 
     @Override
-    public String register(UserRequest userRequest) {
+    public RegisterResponse register(UserRequest userRequest) {
         if (userRepository.findByUsername(userRequest.getUsername()).isPresent()) {
             throw new RuntimeException("El nombre de usuario ya existe");
         }
+
+        String uniqueCode = userCodeGenerator.generateUniqueUserCode();
 
         User user = User.builder()
                 .username(userRequest.getUsername())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
                 .rol(userRequest.getRol())
-                .active(true)  // Por defecto activo
+                .active(true)
+                .userCode(uniqueCode)
                 .build();
 
         userRepository.save(user);
 
-        return "Usuario registrado exitosamente";
+        return new RegisterResponse(user.getUsername(), user.getUserCode());
     }
+
 
     @Override
     public List<UserResponse> getUsers() {
         List<User> users = userRepository.findAll();
 
         return users.stream()
-                .map(user -> new UserResponse(user.getId(), user.getUsername(), user.getRol()))
+                .map(user -> new UserResponse(user.getUserCode(), user.getUsername(), user.getRol()))
                 .collect(Collectors.toList());
     }
 
@@ -93,7 +102,7 @@ public class AuthServiceImpl implements AuthServiceDAO {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        return new UserResponse(user.getId(), user.getUsername(), user.getRol());
+        return new UserResponse(user.getUserCode(), user.getUsername(), user.getRol());
     }
 
     /**
@@ -144,7 +153,7 @@ public class AuthServiceImpl implements AuthServiceDAO {
     public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return new UserResponse(user.getId(), user.getUsername(), user.getRol());
+        return new UserResponse(user.getUserCode(), user.getUsername(), user.getRol());
     }
 
 }
