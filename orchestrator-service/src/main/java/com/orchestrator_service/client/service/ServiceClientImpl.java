@@ -1,4 +1,4 @@
-package com.orchestrator_service.client.service.ClientImpl;
+package com.orchestrator_service.client.service;
 
 import com.orchestrator_service.client.dto.request.AuthFeignRequest;
 import com.orchestrator_service.client.dto.request.ClientFeignRequest;
@@ -8,15 +8,19 @@ import com.orchestrator_service.client.dto.response.ClientFeingResponse;
 import com.orchestrator_service.client.dto.response.ClientResponse;
 import com.orchestrator_service.client.feign.AuthFeign;
 import com.orchestrator_service.client.feign.ClientFeign;
-import com.orchestrator_service.client.service.ClientDAO.ServiceClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ServiceClientImpl implements ServiceClient {
 
-    private final ClientFeign clienteFeign;
+    private final ClientFeign clientFeign;
     private final AuthFeign authFeign;
 
     @Override
@@ -46,7 +50,7 @@ public class ServiceClientImpl implements ServiceClient {
 
             System.out.println(clientFeignRequest);
 
-            ClientFeingResponse clientFeingResponse = clienteFeign.createClient(clientFeignRequest);
+            ClientFeingResponse clientFeingResponse = clientFeign.createClient(clientFeignRequest);
 
             System.out.println(clientFeingResponse);
 
@@ -74,4 +78,38 @@ public class ServiceClientImpl implements ServiceClient {
     public ClientResponse updateClient(ClientRequest clientRequest) {
         return null;
     }
+
+    @Override
+    public List<ClientResponse> getClients() {
+        List<AuthFeignResponse> listUsers = authFeign.getAllUsers();
+        List<ClientFeingResponse> listClients = clientFeign.getAllUsers();
+
+        // Crear un mapa para acceder a los usuarios por userCode en O(1)
+        Map<String, AuthFeignResponse> userMap = listUsers.stream()
+                .collect(Collectors.toMap(AuthFeignResponse::getUserCode, user -> user));
+
+        // Combinar datos de clientes y usuarios
+        return listClients.stream()
+                .map(client -> {
+                    AuthFeignResponse user = userMap.get(client.getUserCode());
+
+                    if (user == null) return null;
+
+                    return ClientResponse.builder()
+                            .usercode(user.getUserCode())
+                            .username(user.getUsername())
+                            .active(user.isActive())
+                            .rol(user.getRol())
+                            .fullname(client.getFullName())
+                            .email(client.getEmail())
+                            .phoneNumber(client.getPhoneNumber())
+                            .registrationDate(client.getRegistrationDate())
+                            .purchaseCount(client.getPurchaseCount())
+                            .totalSpent(client.getTotalSpent())
+                            .build();
+                })
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
 }
