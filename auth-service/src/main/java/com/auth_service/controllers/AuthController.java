@@ -3,7 +3,6 @@ package com.auth_service.controllers;
 import com.auth_service.dto.request.ChangePasswordRequest;
 import com.auth_service.dto.request.LoginRequest;
 import com.auth_service.dto.request.UserRequest;
-import com.auth_service.dto.response.RegisterResponse;
 import com.auth_service.dto.response.UserResponse;
 import com.auth_service.service.daoImpl.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserRequest userRequest) {
         try {
-            RegisterResponse response = authService.register(userRequest);
+            UserResponse response = authService.register(userRequest);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
@@ -58,10 +57,14 @@ public class AuthController {
     }
 
     //buscar usuario por ID
-    @GetMapping("/users/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+    @GetMapping("/users/{userCode}")
+    public ResponseEntity<UserResponse> getUserByUserCode(@PathVariable String userCode) {
         try {
-            UserResponse user = authService.getUserById(id);  // método a implementar
+            System.out.println(userCode);
+            UserResponse user = authService.getUserByUserCode(userCode);
+
+
+
             return ResponseEntity.ok(user);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -80,10 +83,10 @@ public class AuthController {
     }
 
     // Desactivar usuario por ID
-    @PutMapping("/users/{id}/deactivate")
-    public ResponseEntity<String> deactivateUser(@PathVariable Long id) {
+    @PutMapping("/users/{userCode}/deactivate")
+    public ResponseEntity<String> deactivateUser(@PathVariable String userCode) {
         try {
-            String result = authService.deactivateUser(id);
+            String result = authService.deactivateUser(userCode);
             return ResponseEntity.ok(result);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
