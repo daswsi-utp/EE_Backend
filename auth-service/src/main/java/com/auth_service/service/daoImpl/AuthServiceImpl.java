@@ -2,7 +2,6 @@ package com.auth_service.service.daoImpl;
 
 import com.auth_service.dto.request.ChangePasswordRequest;
 import com.auth_service.dto.request.UserRequest;
-import com.auth_service.dto.response.RegisterResponse;
 import com.auth_service.dto.response.UserResponse;
 import com.auth_service.model.User;
 import com.auth_service.repository.UserRepository;
@@ -41,6 +40,7 @@ public class AuthServiceImpl implements AuthServiceDAO {
     @Autowired
     private UserCodeGenerator userCodeGenerator;
 
+
     @Override
     public String login(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthServiceDAO {
     }
 
     @Override
-    public RegisterResponse register(UserRequest userRequest) {
+    public UserResponse register(UserRequest userRequest) {
         if (userRepository.findByUsername(userRequest.getUsername()).isPresent()) {
             throw new RuntimeException("El nombre de usuario ya existe");
         }
@@ -81,7 +81,7 @@ public class AuthServiceImpl implements AuthServiceDAO {
 
         userRepository.save(user);
 
-        return new RegisterResponse(user.getUsername(), user.getUserCode());
+        return new UserResponse(user.getUserCode(),user.getUsername(),user.getRol(), user.isActive());
     }
 
 
@@ -90,7 +90,7 @@ public class AuthServiceImpl implements AuthServiceDAO {
         List<User> users = userRepository.findAll();
 
         return users.stream()
-                .map(user -> new UserResponse(user.getUserCode(), user.getUsername(), user.getRol()))
+                .map(user -> new UserResponse(user.getUserCode(), user.getUsername(), user.getRol(), user.isActive()))
                 .collect(Collectors.toList());
     }
 
@@ -102,7 +102,7 @@ public class AuthServiceImpl implements AuthServiceDAO {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        return new UserResponse(user.getUserCode(), user.getUsername(), user.getRol());
+        return new UserResponse(user.getUserCode(), user.getUsername(), user.getRol(),user.isActive());
     }
 
     /**
@@ -127,8 +127,8 @@ public class AuthServiceImpl implements AuthServiceDAO {
      * Desactivar usuario (cambiar estado activo a false)
      */
     @Override
-    public String deactivateUser(Long userId) {
-        User user = userRepository.findById(userId)
+    public String deactivateUser(String userCode) {
+        User user = userRepository.findByUserCode(userCode)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         user.setActive(false);
@@ -150,10 +150,10 @@ public class AuthServiceImpl implements AuthServiceDAO {
     }
 
     @Override
-    public UserResponse getUserById(Long id) {
-        User user = userRepository.findById(id)
+    public UserResponse getUserByUserCode(String userCode) {
+        User user = userRepository.findByUserCode(userCode)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return new UserResponse(user.getUserCode(), user.getUsername(), user.getRol());
+        return new UserResponse(user.getUserCode(), user.getUsername(), user.getRol(), user.isActive());
     }
 
 }

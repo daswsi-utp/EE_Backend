@@ -1,20 +1,21 @@
-package com.auth_service.dto.response;
+package com.orchestrator_service.client.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class UserResponse {
+@AllArgsConstructor
+public class AuthFeignResponse {
 
     private String userCode;
 
     private String username;
 
-    private String rol;
-
     private boolean active;
-}
 
+    private String rol;
+}
