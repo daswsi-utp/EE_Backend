@@ -33,4 +33,7 @@ public class ClientResponse {
     private Integer purchaseCount;
 
     private Double totalSpent;
+
+    private String address;
+
 }

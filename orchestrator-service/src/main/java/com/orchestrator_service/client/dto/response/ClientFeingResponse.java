@@ -27,4 +27,5 @@ public class ClientFeingResponse {
 
     private Double totalSpent;
 
+    private String address;
 }

@@ -21,4 +21,7 @@ public class ClientFeignRequest {
     private String email;
 
     private String phoneNumber;
+
+    private String address;
+
 }

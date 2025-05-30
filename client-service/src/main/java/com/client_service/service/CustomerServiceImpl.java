@@ -30,10 +30,12 @@ public class CustomerServiceImpl implements CustomerService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .phone(request.getPhoneNumber())
+                .address(request.getAddress())
                 .registrationDate(LocalDate.now())
                 .purchaseCount(0)
                 .totalSpent(0.0)
                 .build();
+
 
         customerRepository.save(customer);
 
@@ -63,6 +65,8 @@ public class CustomerServiceImpl implements CustomerService {
         if (request.getFirstName() != null) customer.setFirstName(request.getFirstName());
         if (request.getLastName() != null) customer.setLastName(request.getLastName());
         if (request.getPhoneNumber() != null) customer.setPhone(request.getPhoneNumber());
+        if (request.getAddress() != null) customer.setAddress(request.getAddress());
+
 
         customerRepository.save(customer);
 
@@ -76,9 +80,11 @@ public class CustomerServiceImpl implements CustomerService {
                 customer.getFirstName() + " " + customer.getLastName(),
                 customer.getEmail(),
                 customer.getPhone(),
+                customer.getAddress(),
                 customer.getRegistrationDate(),
                 customer.getPurchaseCount(),
                 customer.getTotalSpent()
         );
+
     }
 }

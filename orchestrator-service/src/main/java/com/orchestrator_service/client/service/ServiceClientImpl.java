@@ -46,7 +46,9 @@ public class ServiceClientImpl implements ServiceClient {
                     .lastName(clientRequest.getLastName())
                     .email(clientRequest.getEmail())
                     .phoneNumber(clientRequest.getPhoneNumber())
+                    .address(clientRequest.getAddress())
                     .build();
+
 
             System.out.println(clientFeignRequest);
 
@@ -63,6 +65,7 @@ public class ServiceClientImpl implements ServiceClient {
                     .fullname(clientFeingResponse.getFullName())
                     .email(clientFeingResponse.getEmail())
                     .phoneNumber(clientFeingResponse.getPhoneNumber())
+                    .address(clientFeingResponse.getAddress()) // ← aquí
                     .registrationDate(clientFeingResponse.getRegistrationDate())
                     .purchaseCount(clientFeingResponse.getPurchaseCount())
                     .totalSpent(clientFeingResponse.getTotalSpent())
@@ -103,6 +106,7 @@ public class ServiceClientImpl implements ServiceClient {
                             .fullname(client.getFullName())
                             .email(client.getEmail())
                             .phoneNumber(client.getPhoneNumber())
+                            .address(client.getAddress())
                             .registrationDate(client.getRegistrationDate())
                             .purchaseCount(client.getPurchaseCount())
                             .totalSpent(client.getTotalSpent())
@@ -127,6 +131,7 @@ public class ServiceClientImpl implements ServiceClient {
                     .fullname(client.getFullName())
                     .email(client.getEmail())
                     .phoneNumber(client.getPhoneNumber())
+                    .address(client.getAddress())
                     .registrationDate(client.getRegistrationDate())
                     .purchaseCount(client.getPurchaseCount())
                     .totalSpent(client.getTotalSpent())
@@ -136,6 +141,4 @@ public class ServiceClientImpl implements ServiceClient {
             throw new RuntimeException("Error al obtener el cliente por userCode: " + e.getMessage(), e);
         }
     }
-
-
 }
