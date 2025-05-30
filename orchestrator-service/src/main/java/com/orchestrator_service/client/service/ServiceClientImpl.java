@@ -112,4 +112,30 @@ public class ServiceClientImpl implements ServiceClient {
                 .toList();
     }
 
+    @Override
+    public ClientResponse getClientByUserCode(String userCode) {
+        try {
+            AuthFeignResponse user = authFeign.getUser(userCode);
+
+            ClientFeingResponse client = clientFeign.getCustomer(userCode);
+
+            return ClientResponse.builder()
+                    .usercode(user.getUserCode())
+                    .username(user.getUsername())
+                    .active(user.isActive())
+                    .rol(user.getRol())
+                    .fullname(client.getFullName())
+                    .email(client.getEmail())
+                    .phoneNumber(client.getPhoneNumber())
+                    .registrationDate(client.getRegistrationDate())
+                    .purchaseCount(client.getPurchaseCount())
+                    .totalSpent(client.getTotalSpent())
+                    .build();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener el cliente por userCode: " + e.getMessage(), e);
+        }
+    }
+
+
 }

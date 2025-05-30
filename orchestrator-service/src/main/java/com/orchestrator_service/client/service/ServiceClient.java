@@ -9,4 +9,5 @@ public interface ServiceClient {
     ClientResponse createClient(ClientRequest clientRequest);
     ClientResponse updateClient(ClientRequest clientRequest);
     List<ClientResponse> getClients();
+    public ClientResponse getClientByUserCode(String userCode);
 }

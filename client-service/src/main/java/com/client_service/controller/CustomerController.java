@@ -2,8 +2,9 @@ package com.client_service.controller;
 
 
 import com.client_service.dto.request.CustomerRequest;
+import com.client_service.dto.request.CustomerUpdateRequest;
 import com.client_service.dto.response.CustomerResponse;
-import com.client_service.service.clientDAO.CustomerServiceDAO;
+import com.client_service.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.List;
 public class CustomerController {
 
     @Autowired
-    private CustomerServiceDAO customerService;
+    private CustomerService customerService;
 
     // Registrar un nuevo cliente
     @PostMapping
@@ -44,4 +45,17 @@ public class CustomerController {
     public ResponseEntity<List<CustomerResponse>> getAllCustomers() {
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
+
+    @PutMapping("/update/{userCode}")
+    public ResponseEntity<CustomerResponse> updateCustomer(
+            @PathVariable String userCode,
+            @RequestBody CustomerUpdateRequest request) {
+        try {
+            CustomerResponse response = customerService.updateCustomer(userCode, request);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

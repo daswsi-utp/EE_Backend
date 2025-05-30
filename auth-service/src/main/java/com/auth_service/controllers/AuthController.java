@@ -4,7 +4,7 @@ import com.auth_service.dto.request.ChangePasswordRequest;
 import com.auth_service.dto.request.LoginRequest;
 import com.auth_service.dto.request.UserRequest;
 import com.auth_service.dto.response.UserResponse;
-import com.auth_service.service.daoImpl.AuthServiceImpl;
+import com.auth_service.service.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,13 +83,14 @@ public class AuthController {
     }
 
     // Desactivar usuario por ID
-    @PutMapping("/users/{userCode}/deactivate")
-    public ResponseEntity<String> deactivateUser(@PathVariable String userCode) {
+    @PutMapping("/users/toggle/{userCode}")
+    public ResponseEntity<String> toggleUserStatus(@PathVariable String userCode) {
         try {
-            String result = authService.deactivateUser(userCode);
+            String result = authService.toggleUserStatus(userCode);
             return ResponseEntity.ok(result);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
         }
     }
+
 }

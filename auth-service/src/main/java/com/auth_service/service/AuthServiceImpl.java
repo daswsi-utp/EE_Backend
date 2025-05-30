@@ -1,11 +1,10 @@
-package com.auth_service.service.daoImpl;
+package com.auth_service.service;
 
 import com.auth_service.dto.request.ChangePasswordRequest;
 import com.auth_service.dto.request.UserRequest;
 import com.auth_service.dto.response.UserResponse;
 import com.auth_service.model.User;
 import com.auth_service.repository.UserRepository;
-import com.auth_service.service.daoInter.AuthServiceDAO;
 import com.auth_service.utils.JwtUtil;
 import com.auth_service.utils.UserCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
  * - Funciones adicionales: obtener perfil, cambiar contraseña, desactivar usuario, validar token
  */
 @Service
-public class AuthServiceImpl implements AuthServiceDAO {
+public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -123,18 +122,19 @@ public class AuthServiceImpl implements AuthServiceDAO {
         return "Contraseña actualizada exitosamente";
     }
 
-    /**
-     * Desactivar usuario (cambiar estado activo a false)
-     */
     @Override
-    public String deactivateUser(String userCode) {
+    public String toggleUserStatus(String userCode) {
         User user = userRepository.findByUserCode(userCode)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        user.setActive(false);
+        boolean newStatus = !user.isActive();
+        user.setActive(newStatus);
+
         userRepository.save(user);
-        return "Usuario desactivado exitosamente";
+
+        return "Usuario " + (newStatus ? "activado" : "desactivado") + " exitosamente";
     }
+
 
     /**
      * Validar si el token es válido y no expiró
