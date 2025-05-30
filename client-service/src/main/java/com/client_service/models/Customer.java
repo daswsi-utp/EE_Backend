@@ -40,4 +40,7 @@ public class Customer {
 
     @Column(name = "total_spent", nullable = false)
     private Double totalSpent;
+
+    @Column(name = "address")
+    private String address;
 }

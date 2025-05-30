@@ -26,4 +26,6 @@ public class ClientRequest {
 
     private String phoneNumber;
 
+    private String address;
+
 }

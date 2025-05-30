@@ -1,10 +1,10 @@
-package com.client_service.service.clientImpl;
+package com.client_service.service;
 
 import com.client_service.dto.request.CustomerRequest;
+import com.client_service.dto.request.CustomerUpdateRequest;
 import com.client_service.dto.response.CustomerResponse;
 import com.client_service.models.Customer;
 import com.client_service.repository.CustomerRepository;
-import com.client_service.service.clientDAO.CustomerServiceDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CustomerServiceImpl implements CustomerServiceDAO {
+public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -30,10 +30,12 @@ public class CustomerServiceImpl implements CustomerServiceDAO {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .phone(request.getPhoneNumber())
+                .address(request.getAddress())
                 .registrationDate(LocalDate.now())
                 .purchaseCount(0)
                 .totalSpent(0.0)
                 .build();
+
 
         customerRepository.save(customer);
 
@@ -55,6 +57,22 @@ public class CustomerServiceImpl implements CustomerServiceDAO {
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
+    @Override
+    public CustomerResponse updateCustomer(String userCode, CustomerUpdateRequest request) {
+        Customer customer = customerRepository.findByUserCode(userCode)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
+        if (request.getFirstName() != null) customer.setFirstName(request.getFirstName());
+        if (request.getLastName() != null) customer.setLastName(request.getLastName());
+        if (request.getPhoneNumber() != null) customer.setPhone(request.getPhoneNumber());
+        if (request.getAddress() != null) customer.setAddress(request.getAddress());
+
+
+        customerRepository.save(customer);
+
+        return toResponse(customer);
+    }
+
 
     private CustomerResponse toResponse(Customer customer) {
         return new CustomerResponse(
@@ -62,9 +80,11 @@ public class CustomerServiceImpl implements CustomerServiceDAO {
                 customer.getFirstName() + " " + customer.getLastName(),
                 customer.getEmail(),
                 customer.getPhone(),
+                customer.getAddress(),
                 customer.getRegistrationDate(),
                 customer.getPurchaseCount(),
                 customer.getTotalSpent()
         );
+
     }
 }

@@ -14,6 +14,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/eureka/**").permitAll()
                         .anyRequest().permitAll()  // Permitir todas las solicitudes sin autenticación
                 );
 
