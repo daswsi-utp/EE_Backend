@@ -48,4 +48,3 @@ public class ChatRoom {
         this.createdAt = LocalDateTime.now();
     }
 }
-

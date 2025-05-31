@@ -48,23 +48,3 @@ public class ChatMessage {
         this.timestamp = LocalDateTime.now();
     }
 }
-
-// Enums
-package com.chat_service.entity;
-
-public enum ChatStatus {
-    WAITING,    // Esperando agente
-    ACTIVE,     // Chat activo
-    CLOSED      // Chat cerrado
-}
-
-public enum SenderType {
-    CUSTOMER,   // Cliente
-    AGENT       // Agente de servicio
-}
-
-public enum MessageType {
-    TEXT,       // Mensaje de texto
-    IMAGE,      // Imagen
-    FILE        // Archivo
-}
