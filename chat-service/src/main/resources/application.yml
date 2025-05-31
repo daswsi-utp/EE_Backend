@@ -5,6 +5,18 @@ spring:
   application:
     name: chat-service
 
+  cloud:
+    gateway:
+      routes:
+        - id: chat-service
+          uri: lb://chat-service
+          predicates:
+            - Path=/api/chat/**
+        - id: chat-websocket
+          uri: lb://chat-service
+          predicates:
+            - Path=/ws/**
+
   datasource:
     url: jdbc:mysql://localhost:3306/chat_db
     username: ${DB_USERNAME:root}
