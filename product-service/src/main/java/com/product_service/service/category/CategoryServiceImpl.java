@@ -4,6 +4,7 @@ import com.product_service.dto.category.request.CategoryRequestDTO;
 import com.product_service.dto.category.response.CategoryResponseDTO;
 import com.product_service.models.Category;
 import com.product_service.repository.category.CategoryRepository;
+import com.product_service.utils.CodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponseDTO createCategory(CategoryRequestDTO request) {
+
+        CodeGenerator codeGenerator = new CodeGenerator();
+
         Category category = Category.builder()
-                .categoryId(request.getCategoryId())
+                .categoryId(codeGenerator.generateUniqueCategoryCode(categoryRepository))
                 .name(request.getName())
                 .description(request.getDescription())
+                .active(true)
                 .build();
         return mapToDTO(categoryRepository.save(category));
     }
@@ -55,7 +60,9 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(String categoryId) {
         Category category = categoryRepository.findByCategoryId(categoryId)
                 .orElseThrow(() -> new NoSuchElementException("Categoría no encontrada"));
-        categoryRepository.delete(category);
+
+        category.setActive(!category.isActive()); // Intercambia el estado
+        categoryRepository.save(category);
     }
 
     private CategoryResponseDTO mapToDTO(Category category) {
@@ -63,6 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .categoryId(category.getCategoryId())
                 .name(category.getName())
                 .description(category.getDescription())
+                .active(category.isActive())
                 .build();
     }
 }

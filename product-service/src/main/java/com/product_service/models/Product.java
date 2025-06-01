@@ -29,7 +29,7 @@ public class Product {
     private String longDescription; // Descripción larga
 
     @ManyToOne
-    @JoinColumn(name = "category_code", referencedColumnName = "code")
+    @JoinColumn(name = "category_code", referencedColumnName = "categoryId")
     private Category category; // Categoría del producto
 
     private Double price; // Precio

@@ -22,4 +22,6 @@ public class Category {
 
     @Column(length = 500)
     private String description; // Descripción opcional de la categoría
+
+    private boolean active;
 }
