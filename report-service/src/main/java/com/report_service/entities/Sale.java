@@ -4,11 +4,11 @@ import java.time.LocalDate;
 
 public class Sale {
     public LocalDate date;
-    public Product product;
+    public ProductEntity product;
     public Integer quantity;
     public double total;
 
-    public Sale(LocalDate date, Product product, Integer quantity, double total) {
+    public Sale(LocalDate date, ProductEntity product, Integer quantity, double total) {
         this.date = date;
         this.product = product;
         this.quantity = quantity;
@@ -31,11 +31,11 @@ public class Sale {
         this.quantity = quantity;
     }
 
-    public Product getProduct() {
+    public ProductEntity getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(ProductEntity product) {
         this.product = product;
     }
 
