@@ -29,7 +29,7 @@
     <module>employee-service</module>
     <module>content-service</module>
     <module>chat-service</module>
-    <module>category-service</module>
+    <module>orchestrator-service</module>
   </modules>
 
   <properties>

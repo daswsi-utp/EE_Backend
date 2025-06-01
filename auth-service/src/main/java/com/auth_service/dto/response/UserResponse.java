@@ -8,8 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponse {
-    private Long id;
+
+    private String userCode;
+
     private String username;
+
     private String rol;
+
+    private boolean active;
 }
 
