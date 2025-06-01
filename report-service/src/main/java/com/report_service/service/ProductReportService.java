@@ -9,7 +9,16 @@ import java.util.List;
 public class ProductReportService {
 
     public List<?> getLowStockProducts() {
-        return null;
+        return List.of(
+            new Object() {
+                public final String nombre = "Producto A";
+                public final int stock = 3;
+            },
+            new Object() {
+                public final String nombre = "Producto B";
+                public final int stock = 5;
+            }
+        );
     }
 
     public List<TopProductDTO> getTopSellingProducts() {
