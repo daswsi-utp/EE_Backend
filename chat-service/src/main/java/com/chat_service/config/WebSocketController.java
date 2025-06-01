@@ -25,7 +25,6 @@ public class WebSocketController {
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/chat/{chatRoomId}")
     public String addUser(@Payload String userName, SimpMessageHeaderAccessor headerAccessor) {
-        // Agregar usuario a la sesión WebSocket
         headerAccessor.getSessionAttributes().put("username", userName);
         return userName + " joined the chat";
     }
