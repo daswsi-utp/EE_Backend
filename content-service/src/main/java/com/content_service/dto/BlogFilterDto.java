@@ -2,7 +2,7 @@ package com.content_service.dto;
 
 import java.time.LocalDateTime;
 
-// DTO para filtros de blog
+// DTO para filtros
 public class BlogFilterDto {
     private Long id;
     private String filterName;
@@ -12,7 +12,7 @@ public class BlogFilterDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Constructors
+
     public BlogFilterDto() {}
 
     public BlogFilterDto(Long id, String filterName, String filterType,
@@ -27,7 +27,6 @@ public class BlogFilterDto {
         this.updatedAt = updatedAt;
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

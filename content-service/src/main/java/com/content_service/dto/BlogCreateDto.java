@@ -1,6 +1,6 @@
 package com.content_service.dto;
 
-// DTO para crear/actualizar blogs
+// DTO para crear/actualizar
 public class BlogCreateDto {
     private String title;
     private String content;
@@ -10,10 +10,10 @@ public class BlogCreateDto {
     private String imageUrl;
     private Boolean published = false;
 
-    // Constructors
+
     public BlogCreateDto() {}
 
-    // Getters and Setters
+
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 

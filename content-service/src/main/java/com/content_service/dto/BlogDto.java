@@ -15,7 +15,7 @@ public class BlogDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Constructors
+
     public BlogDto() {}
 
     public BlogDto(Long id, String title, String content, String summary,
@@ -33,7 +33,7 @@ public class BlogDto {
         this.updatedAt = updatedAt;
     }
 
-    // Getters and Setters
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -33,7 +33,7 @@ public class BlogFilterController {
         return ResponseEntity.ok(filters);
     }
 
-    // === ENDPOINTS DE ADMINISTRACIÓN ===
+    // ENDPOINTS DE ADMIN
 
     // Obtener todos los filtros (admin)
     @GetMapping("/admin")
