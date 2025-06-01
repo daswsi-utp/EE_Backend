@@ -8,7 +8,7 @@ spring:
     import: optional:configserver:http://localhost:8888
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/EcommerceDB
+    url: jdbc:mysql://localhost:3306/EcommerceDB?createDatabaseIfNotExist=true
     username: root
     password:
   jpa:
@@ -22,4 +22,12 @@ eureka:
     hostname: localhost
   client:
     service-url:
+
       defaultZone: http://localhost:8761/eureka
+app:
+  sales-service:
+    base-url: http://localhost:8081
+  user-service:
+    base-url: http://localhost:8082
+  product-service:
+    base-url: http://localhost:8083
