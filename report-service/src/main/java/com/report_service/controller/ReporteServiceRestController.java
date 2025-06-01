@@ -24,6 +24,38 @@ import java.util.List;
 @RequestMapping("/api/reports")
 public class ReporteServiceRestController {
 
+    @GetMapping("/sales/monthly")
+    public ResponseEntity<List<?>> getSalesForMonth() {
+        ReportService reportService = new ReportService();
+        return ResponseEntity.ok(reportService.getSalesForMonth());
+    }
+
+    @GetMapping("/sales/best-selling-products")
+    public ResponseEntity<List<?>> getBestSellingProducts() {
+        ReportService reportService = new ReportService();
+        return ResponseEntity.ok(reportService.getBestSellingProducts());
+    }
+    @GetMapping("/sales/financial-analysis")
+    public ResponseEntity<List<?>> getFinancialAnalysis() {
+        ReportService reportService = new ReportService();
+        return ResponseEntity.ok(reportService.getFinancialAnalysis());
+    }
+    @GetMapping("/sales/statistics")
+    public ResponseEntity<List<?>> getStatistics() {
+        ReportService reportService = new ReportService();
+        return ResponseEntity.ok(reportService.getStatistics());
+    }
+
+    @GetMapping("/products")
+    public ResponseEntity<List<?>> getProducts() {
+        ReportService reportService = new ReportService();
+        return ResponseEntity.ok(reportService.getProducts());
+    }
+
+
+
+
+
     @GetMapping("/sales/pdf")
     public ResponseEntity<byte[]> getVentasPdf() throws IOException, DocumentException {
         ReportService reportService = new ReportService();

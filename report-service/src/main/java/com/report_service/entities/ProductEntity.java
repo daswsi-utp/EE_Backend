@@ -1,10 +1,10 @@
 package com.report_service.entities;
 
-public class Product {
+public class ProductEntity {
     public String name;
     public double price;
 
-    public Product(String name, double price) {
+    public ProductEntity(String name, double price) {
         this.name = name;
         this.price = price;
     }
