@@ -8,7 +8,7 @@ spring:
     import: optional:configserver:http://localhost:8888
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/EcommerceDB
+    url: jdbc:mysql://localhost:3306/EcommerceDB?createDatabaseIfNotExist=true
     username: root
     password:
   jpa:
