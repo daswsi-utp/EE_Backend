@@ -2,6 +2,7 @@ package com.report_service.service;
 
 import com.report_service.entities.Product;
 import com.report_service.entities.Sale;
+import com.report_service.entities.data.SalesMonth;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,15 +10,33 @@ import java.util.List;
 
 public class ReportService {
 
-    public List<Sale> getSales(){
-        List<Sale> sales = new ArrayList<>();
 
-        Sale sale1 = new Sale(LocalDate.now(), new Product("Product1", 50), 2, 100.0);
-        Sale sale2 = new Sale(LocalDate.now(), new Product("Product2", 50), 1, 50.0);
+    public List<SalesMonth> getSalesForMonth() {
 
-        sales.add(sale1);
-        sales.add(sale2);
-        return sales;
+        List<SalesMonth> salesMonths = new ArrayList<>();
+        String months[] = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"};
+
+        for (int i = 0; i < 12; i++) {
+            SalesMonth salesMonth = new SalesMonth();
+            salesMonth.setMonth(months[i]);
+            salesMonth.setSales(getSalesForMonth(i + 1));
+            salesMonths.add(salesMonth);
+        }
     }
+
+
+
+
+
+//test
+//    public List<Sale> getSales(){
+//        List<Sale> sales = new ArrayList<>();
+//        Sale sale1 = new Sale(LocalDate.now(), new Product("Product1", 50), 2, 100.0);
+//        Sale sale2 = new Sale(LocalDate.now(), new Product("Product2", 50), 1, 50.0);
+//        sales.add(sale1);
+//        sales.add(sale2);
+//        return sales;
+//    }
+
 
 }
