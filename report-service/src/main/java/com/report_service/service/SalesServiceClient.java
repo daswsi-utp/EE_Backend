@@ -14,8 +14,10 @@ import java.util.List;
 public class SalesServiceClient {
     private final WebClient webClient;
 
-    public SalesServiceClient(WebClient.Builder webClientBuilder, String serviceUrl) {
-        this.webClient = webClientBuilder.baseUrl(serviceUrl).build();
+    String serviceUrl = "http://sales-service";
+
+    public SalesServiceClient(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.baseUrl(this.serviceUrl).build();
     }
 
     public Mono<SalesSummaryDTO> getSalesSummary(LocalDate startDate, LocalDate endDate) {
