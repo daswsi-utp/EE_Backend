@@ -31,7 +31,6 @@ public class WebSocketEventListener {
 
         if (username != null) {
             logger.info("User Disconnected: " + username);
-            // Aquí puedes agregar lógica para notificar desconexión
         }
     }
 }
