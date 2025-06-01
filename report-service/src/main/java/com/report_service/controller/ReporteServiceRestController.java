@@ -24,10 +24,9 @@ import java.util.List;
 @RequestMapping("/api/reports")
 public class ReporteServiceRestController {
 
-    private ReportService reportService;
-    // Reporte de ventas en PDF
     @GetMapping("/sales/pdf")
     public ResponseEntity<byte[]> getVentasPdf() throws IOException, DocumentException {
+        ReportService reportService = new ReportService();
         List<Sale> sales = reportService.getSales();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Document document = new Document();
@@ -55,6 +54,8 @@ public class ReporteServiceRestController {
 
     @GetMapping("/sales/excel")
     public ResponseEntity<byte[]> getVentasExcel() throws IOException {
+        ReportService reportService = new ReportService();
+
         List<Sale> sales = reportService.getSales();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         XSSFWorkbook workbook = new XSSFWorkbook();
