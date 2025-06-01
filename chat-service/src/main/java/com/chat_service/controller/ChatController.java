@@ -93,7 +93,6 @@ public class ChatController {
         return ResponseEntity.ok().build();
     }
 
-    // Health check
     @GetMapping("/health")
     public ResponseEntity<String> healthCheck() {
         return ResponseEntity.ok("Chat Service is running");

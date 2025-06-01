@@ -46,7 +46,7 @@ public class ChatService {
             return convertToDTO(waitingChat.get());
         }
 
-        // Crear nueva sala de chat
+        // Crear nueva sala
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setCustomerId(request.getCustomerId());
         chatRoom.setCustomerName(request.getCustomerName());
@@ -55,7 +55,6 @@ public class ChatService {
 
         ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
 
-        // Notificar a los agentes sobre nuevo chat en espera
         messagingTemplate.convertAndSend("/topic/waiting-chats", convertToDTO(savedChatRoom));
 
         return convertToDTO(savedChatRoom);

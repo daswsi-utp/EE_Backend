@@ -2,7 +2,7 @@
 package com.chat_service.entity;
 
 public enum MessageType {
-    TEXT,       // Mensaje de texto
+    TEXT,       // Mensaje
     IMAGE,      // Imagen
     FILE        // Archivo
 }
