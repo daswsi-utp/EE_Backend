@@ -49,7 +49,6 @@ public class Blog {
         updatedAt = LocalDateTime.now();
     }
 
-    // Constructors
     public Blog() {}
 
     public Blog(String title, String content, String summary, String author, String category) {
@@ -60,7 +59,6 @@ public class Blog {
         this.category = category;
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

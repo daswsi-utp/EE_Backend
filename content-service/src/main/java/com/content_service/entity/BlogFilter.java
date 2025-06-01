@@ -15,7 +15,7 @@ public class BlogFilter {
     private String filterName;
 
     @Column(nullable = false, length = 50)
-    private String filterType; // CATEGORY, AUTHOR, TAG, etc.
+    private String filterType;
 
     @Column(length = 200)
     private String description;
@@ -40,7 +40,7 @@ public class BlogFilter {
         updatedAt = LocalDateTime.now();
     }
 
-    // Constructors
+
     public BlogFilter() {}
 
     public BlogFilter(String filterName, String filterType, String description) {
@@ -49,7 +49,6 @@ public class BlogFilter {
         this.description = description;
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
