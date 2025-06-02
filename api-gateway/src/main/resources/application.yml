@@ -1,39 +1,6 @@
-server:
-  port: 8080
-
 spring:
   application:
     name: gateway-service
   config:
     import: optional:configserver:http://localhost:8888
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-      routes:
-        - id: auth-service
-          uri: lb://AUTH-SERVICE
-          predicates:
-            - Path=/auth/**
-
-        - id: client-service
-          uri: lb://CLIENT-SERVICE
-          predicates:
-            - Path=/customers/**
-
-        - id: orchestrator-service
-          uri: lb://ORCHESTRATOR-SERVICE
-          predicates:
-            - Path=/orchestrator/**
-
-        - id: product-service
-          uri: lb://PRODUCT-SERVICE
-          predicates:
-            - Path=/categories/**, /products/**, /reviews/**
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
+  

@@ -2,24 +2,35 @@ server:
   port: 8086
 
 spring:
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      enabled: false
   application:
     name: employee-service
-  config:
-    import: optional:configserver:http://localhost:8888
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/EcommerceDB
     username: root
-    password:
+    password: admin
   jpa:
     hibernate:
       ddl-auto: update
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect 
+    
 
 eureka:
-  instance:
-    hostname: localhost
   client:
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
+    instance-id: ${spring.application.name}:${server.port}
