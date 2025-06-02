@@ -26,6 +26,7 @@ public class ServiceClientImpl implements ServiceClient {
     @Override
     public ClientResponse createClient(ClientRequest clientRequest) {
         try {
+
             // 1. Crear usuario en auth-service
             AuthFeignRequest authRequest = AuthFeignRequest.builder()
                     .username(clientRequest.getUsername())

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/blogs")
+@RequestMapping("/blogs")
 @CrossOrigin(origins = "*")
 public class BlogController {
 
