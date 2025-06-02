@@ -1,10 +1,7 @@
 package com.employee_service.service.dao;
 
-import com.employee_service.dto.request.CreateEmployeeRequest;
-import com.employee_service.dto.request.FilterEmployeeRequest;
-import com.employee_service.dto.request.UpdateEmployeeRequest;
+import com.employee_service.dto.request.*;
 import com.employee_service.dto.response.EmployeeResponse;
-
 import java.util.List;
 
 public interface EmployeeService {

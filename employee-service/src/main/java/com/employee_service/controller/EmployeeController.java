@@ -1,8 +1,6 @@
 package com.employee_service.controller;
 
-import com.employee_service.dto.request.CreateEmployeeRequest;
-import com.employee_service.dto.request.FilterEmployeeRequest;
-import com.employee_service.dto.request.UpdateEmployeeRequest;
+import com.employee_service.dto.request.*;
 import com.employee_service.dto.response.EmployeeResponse;
 import com.employee_service.service.dao.EmployeeService;
 import jakarta.validation.Valid;
@@ -21,39 +19,39 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
-        EmployeeResponse response = employeeService.createEmployee(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<EmployeeResponse> createEmployee(
+            @Valid @RequestBody CreateEmployeeRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(employeeService.createEmployee(request));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable Long id) {
-        EmployeeResponse response = employeeService.getEmployeeById(id);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<EmployeeResponse> getEmployeeById(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
     @GetMapping
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
-        List<EmployeeResponse> responses = employeeService.getAllEmployees();
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
     @PostMapping("/filter")
-    public ResponseEntity<List<EmployeeResponse>> filterEmployees(@RequestBody FilterEmployeeRequest filter) {
-        List<EmployeeResponse> responses = employeeService.filterEmployees(filter);
-        return ResponseEntity.ok(responses);
+    public ResponseEntity<List<EmployeeResponse>> filterEmployees(
+            @RequestBody FilterEmployeeRequest filter) {
+        return ResponseEntity.ok(employeeService.filterEmployees(filter));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(
             @PathVariable Long id,
             @Valid @RequestBody UpdateEmployeeRequest request) {
-        EmployeeResponse response = employeeService.updateEmployee(id, request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(employeeService.updateEmployee(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteEmployee(
+            @PathVariable Long id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
     }
