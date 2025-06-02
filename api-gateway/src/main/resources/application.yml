@@ -31,7 +31,35 @@ spring:
         - id: product-service
           uri: lb://PRODUCT-SERVICE
           predicates:
-            - Path=/categories/**, /products/**, /reviews/**
+            - Path=/categories/**, /products/**, /reviews/**, /images/**
+
+        - id: content-service
+          uri: lb://CONTENT-SERVICE
+          predicates:
+            - Path=/blogs/**
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - http://localhost:3000
+              - http://localhost:3001
+              - http://localhost:3002
+              - http://localhost:3003
+              - http://localhost:3004
+              - http://localhost:3005
+              - http://localhost:3006
+              - http://localhost:8761
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+              - PATCH
+            allowedHeaders: "*"
+            allowCredentials: true
+
 
 eureka:
   client:

@@ -2,6 +2,7 @@ package com.auth_service.service;
 
 import com.auth_service.dto.request.ChangePasswordRequest;
 import com.auth_service.dto.request.UserRequest;
+import com.auth_service.dto.response.LoginResponse;
 import com.auth_service.dto.response.UserResponse;
 import com.auth_service.model.User;
 import com.auth_service.repository.UserRepository;
@@ -39,6 +40,28 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private UserCodeGenerator userCodeGenerator;
 
+    public LoginResponse loginWithUserDetails(String username, String password) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+
+        if (userOpt.isEmpty()) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+
+        User user = userOpt.get();
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
+
+        if (!user.isActive()) {
+            throw new RuntimeException("Usuario inactivo");
+        }
+
+        Map<String, Object> claims = Map.of("role", user.getRol());
+        String token = jwtUtil.generateToken(user.getUsername(), claims);
+
+        return new LoginResponse(token, user.getUsername(), user.getUserCode());
+    }
 
     @Override
     public String login(String username, String password) {
