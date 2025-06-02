@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/blog-filters")
+@RequestMapping("/blog-filters")
 @CrossOrigin(origins = "*")
 public class BlogFilterController {
 

@@ -3,6 +3,7 @@ package com.auth_service.controllers;
 import com.auth_service.dto.request.ChangePasswordRequest;
 import com.auth_service.dto.request.LoginRequest;
 import com.auth_service.dto.request.UserRequest;
+import com.auth_service.dto.response.LoginResponse;
 import com.auth_service.dto.response.UserResponse;
 import com.auth_service.service.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,16 @@ public class AuthController {
     @Autowired
     private AuthServiceImpl authService;
 
-    //Logear y devolver token de usuario
+    // Logear y devolver token, usuario y código de usuario
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest request) {
         try {
-            String token = authService.login(request.getUsername(), request.getPassword());
-            return ResponseEntity.ok(Map.of("token", token));
+            LoginResponse response = authService.loginWithUserDetails(request.getUsername(), request.getPassword());
+            return ResponseEntity.ok(Map.of(
+                    "token", response.getToken(),
+                    "user", response.getUsername(),
+                    "userCode", response.getUserCode()
+            ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
         }
