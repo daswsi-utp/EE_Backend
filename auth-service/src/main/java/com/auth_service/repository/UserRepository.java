@@ -1,5 +1,6 @@
 package com.auth_service.repository;
 
+import com.auth_service.model.Role;
 import com.auth_service.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Verificar si un userCode ya existe (para evitar duplicados en generación)
     boolean existsByUserCode(String userCode);
+
+    boolean existsByRole(Role role);
 }

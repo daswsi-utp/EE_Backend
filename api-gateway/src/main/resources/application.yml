@@ -38,28 +38,28 @@ spring:
           predicates:
             - Path=/blogs/**
 
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins:
-              - http://localhost:3000
-              - http://localhost:3001
-              - http://localhost:3002
-              - http://localhost:3003
-              - http://localhost:3004
-              - http://localhost:3005
-              - http://localhost:3006
-              - http://localhost:8761
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-              - PATCH
-            allowedHeaders: "*"
-            allowCredentials: true
+        - id: order-pay-service
+          uri: lb://ORDER-PAY-SERVICE
+          predicates:
+            - Path=/invoices/**
 
+        - id: chat-http
+          uri: lb://CHAT-SERVICE
+          predicates:
+            - Path=/chat/**,/chatvivo/**
+
+        - id: chat-ws
+          uri: lb://CHAT-SERVICE
+          predicates:
+            - Path=/ws-chat/**
+          metadata:
+            websocket:
+              enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.springframework.web.cors: TRACE
 
 eureka:
   client:
