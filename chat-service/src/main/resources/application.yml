@@ -4,18 +4,28 @@ server:
 spring:
   application:
     name: chat-service
+
   config:
     import: optional:configserver:http://localhost:8888
+
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/EcommerceDB
     username: root
-    password:
+    password: # agrégala si tienes una
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
+    # Deshabilita show-sql para que no imprima las consultas SQL
+    show-sql: false
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
+
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST:localhost}
+      port: 6379
 
 eureka:
   instance:
@@ -23,3 +33,25 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+logging:
+  level:
+    # Deja el log de Redis en DEBUG, ya que es relevante para la mensajería
+    org.springframework.data.redis: DEBUG
+
+    # === Logs de WebSocket y STOMP (DEBUG) ===
+    # Muestra los logs de la conexión WebSocket y la gestión de sesiones.
+    org.springframework.web.socket: DEBUG
+    # Muestra los logs de los componentes de mensajería (STOMP).
+    org.springframework.messaging.simp: DEBUG
+    # Muestra los logs del broker (maneja los tópicos y suscriptores).
+    org.springframework.messaging.simp.broker: DEBUG
+    # Muestra los logs de los comandos STOMP (CONNECT, SUBSCRIBE, SEND, etc.).
+    org.springframework.messaging.simp.stomp: DEBUG
+
+    # === Deshabilita los logs de SQL ===
+    # Pon este paquete en INFO o WARN para no ver las consultas.
+    org.hibernate.SQL: INFO
+
+    # Opcional: Para ver los logs de tus propios controladores y servicios.
+    com.chat_service: DEBUG
