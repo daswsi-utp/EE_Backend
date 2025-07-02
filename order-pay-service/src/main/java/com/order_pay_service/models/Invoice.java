@@ -9,28 +9,28 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "boletas")
+@Table(name = "invoices")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Boleta {
+public class Invoice {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String seriesNumber;
 
-    private String numeroSerie;
+    private LocalDateTime issuedAt;
 
-    private LocalDateTime fechaEmision;
+    private Double totalAmount;
 
-    private Double total;
+    private String shippingAddress;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "boleta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<DetalleBoleta> detalles;
+    private List<InvoiceDetail> details;
 }
+
