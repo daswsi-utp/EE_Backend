@@ -1,4 +1,4 @@
-package com.product_service.models;
+package com.order_pay_service.modelsAcopl;
 
 import jakarta.persistence.*;
 import lombok.*;
