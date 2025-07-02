@@ -1,7 +1,10 @@
-package com.client_service.models;
+package com.order_pay_service.modelsAcopl;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
