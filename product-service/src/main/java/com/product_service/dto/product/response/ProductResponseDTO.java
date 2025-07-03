@@ -15,7 +15,6 @@ public class ProductResponseDTO {
     private String description;
     private String longDescription;
     private String category;
-    private String categoryId;
     private Double price;
     private String discount;
     private Double rating;
@@ -30,7 +29,7 @@ public class ProductResponseDTO {
     private String care;
     private String warranty;
     private String origin;
-    private String imageUrl;
+    private String imageUrl; // URL pública que apunta a la imagen
     private List<String> tags;
     private List<String> highlights;
 }

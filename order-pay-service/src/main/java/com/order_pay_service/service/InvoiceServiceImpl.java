@@ -32,9 +32,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public Invoice createInvoice(InvoiceRequestDTO dto) {
         // Buscar al cliente
-        System.out.println(dto.getCustomerCode());
         Customer customer = customerRepository.findByUserCode(dto.getCustomerCode());
-        System.out.println(dto.getCustomerCode());
 
         // Generar un número de serie único
         String seriesNumber;
@@ -82,7 +80,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice invoice = Invoice.builder()
                 .seriesNumber(seriesNumber)
                 .issuedAt(LocalDateTime.now())
-                .estate(dto.getEstate())
                 .shippingAddress(dto.getShippingAddress())
                 .totalAmount(totalAmount)
                 .customer(customer)
@@ -103,10 +100,4 @@ public class InvoiceServiceImpl implements InvoiceService {
     public List<Invoice> getAllInvoices() {
         return invoiceRepository.findAll();
     }
-
-    @Override
-    public List<Invoice> getInvoicesByUserCode(String userCode) {
-        return invoiceRepository.findByCustomerUserCode(userCode);
-    }
-
 }

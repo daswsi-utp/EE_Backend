@@ -17,6 +17,9 @@ import java.time.LocalDate;
 public class Customer {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name = "user_code", unique = true, nullable = false, length = 12)
     private String userCode;
 

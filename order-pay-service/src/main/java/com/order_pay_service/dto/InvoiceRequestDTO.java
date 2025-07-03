@@ -9,7 +9,6 @@ import java.util.List;
 public class InvoiceRequestDTO {
     private String customerCode;
     private String shippingAddress;
-    private String estate;
     private Double totalAmount;
     private List<InvoiceDetailDTO> details;
 }

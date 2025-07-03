@@ -75,7 +75,7 @@ public class ProductServiceImpl implements ProductService {
             product.setImageName(imageName);
         }
 
-        Category category = categoryRepository.findByCategoryId(request.getCategoryId())
+        Category category = categoryRepository.findByCategoryId(request.getCategory())
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
 
         product.setName(request.getName());

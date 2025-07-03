@@ -22,14 +22,10 @@ public class InvoiceController {
         return ResponseEntity.ok(invoice);
     }
 
+
     @GetMapping
     public ResponseEntity<List<Invoice>> getAllInvoices() {
         List<Invoice> invoices = invoiceService.getAllInvoices();
         return ResponseEntity.ok(invoices);
-    }
-
-    @GetMapping("/by-user/{userCode}")
-    public List<Invoice> getInvoicesByUserCode(@PathVariable String userCode) {
-        return invoiceService.getInvoicesByUserCode(userCode);
     }
 }

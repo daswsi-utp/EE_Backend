@@ -12,6 +12,9 @@ import lombok.*;
 public class Category {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // ID único de la categoría
+
     private String categoryId;
 
     @Column(nullable = false, unique = true)
