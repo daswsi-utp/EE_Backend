@@ -21,6 +21,8 @@ public class Invoice {
 
     private LocalDateTime issuedAt;
 
+    private String estate;
+
     private Double totalAmount;
 
     private String shippingAddress;
