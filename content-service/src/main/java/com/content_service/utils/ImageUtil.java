@@ -100,5 +100,10 @@ public class ImageUtil {
         }
     }
 
-
+    private String getFileExtension(String fileName) {
+        if (fileName == null || !fileName.contains(".")) {
+            throw new IllegalArgumentException("Archivo sin extensión válida");
+        }
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
 }
