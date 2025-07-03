@@ -48,4 +48,28 @@ public class ImageController {
         }
     }
 
+    // Servir imagen
+    @GetMapping("/{fileName}")
+    public ResponseEntity<Resource> getImage(@PathVariable String fileName) {
+        try {
+            Path imagePath = Paths.get("content-service/src/uploads/").resolve(fileName);
+            Resource resource = new UrlResource(imagePath.toUri());
+
+            if (resource.exists() && resource.isReadable()) {
+                // Determinar el tipo de contenido basado en la extensión
+                String contentType = getContentType(fileName);
+
+                return ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType(contentType))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
 }
