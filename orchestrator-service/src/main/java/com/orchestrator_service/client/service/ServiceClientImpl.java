@@ -88,34 +88,32 @@ public class ServiceClientImpl implements ServiceClient {
         List<AuthFeignResponse> listUsers = authFeign.getAllUsers();
         List<ClientFeingResponse> listClients = clientFeign.getAllUsers();
 
-        // Crear un mapa para acceder a los usuarios por userCode en O(1)
-        Map<String, AuthFeignResponse> userMap = listUsers.stream()
-                .collect(Collectors.toMap(AuthFeignResponse::getUserCode, user -> user));
+        // Crear un mapa de clientes por userCode
+        Map<String, ClientFeingResponse> clientMap = listClients.stream()
+                .collect(Collectors.toMap(ClientFeingResponse::getUserCode, client -> client));
 
-        // Combinar datos de clientes y usuarios
-        return listClients.stream()
-                .map(client -> {
-                    AuthFeignResponse user = userMap.get(client.getUserCode());
-
-                    if (user == null) return null;
+        // Recorrer usuarios y combinar con datos de cliente (si existe)
+        return listUsers.stream()
+                .map(user -> {
+                    ClientFeingResponse client = clientMap.get(user.getUserCode());
 
                     return ClientResponse.builder()
                             .usercode(user.getUserCode())
                             .username(user.getUsername())
                             .active(user.isActive())
                             .rol(user.getRol())
-                            .fullname(client.getFullName())
-                            .email(client.getEmail())
-                            .phoneNumber(client.getPhoneNumber())
-                            .address(client.getAddress())
-                            .registrationDate(client.getRegistrationDate())
-                            .purchaseCount(client.getPurchaseCount())
-                            .totalSpent(client.getTotalSpent())
+                            .fullname(client != null ? client.getFullName() : "Sin información")
+                            .email(client != null ? client.getEmail() : "Sin información")
+                            .phoneNumber(client != null ? client.getPhoneNumber() : "Sin información")
+                            .address(client != null ? client.getAddress() : "Sin información")
+                            .registrationDate(client != null ? client.getRegistrationDate() : null)
+                            .purchaseCount(client != null ? client.getPurchaseCount() : 0)
+                            .totalSpent(client != null ? client.getTotalSpent() : 0.0)
                             .build();
                 })
-                .filter(Objects::nonNull)
                 .toList();
     }
+
 
     @Override
     public ClientResponse getClientByUserCode(String userCode) {

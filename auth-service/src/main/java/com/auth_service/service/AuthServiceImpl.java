@@ -4,7 +4,9 @@ import com.auth_service.dto.request.ChangePasswordRequest;
 import com.auth_service.dto.request.UserRequest;
 import com.auth_service.dto.response.LoginResponse;
 import com.auth_service.dto.response.UserResponse;
+import com.auth_service.model.Role;
 import com.auth_service.model.User;
+import com.auth_service.repository.RoleRepository;
 import com.auth_service.repository.UserRepository;
 import com.auth_service.utils.JwtUtil;
 import com.auth_service.utils.UserCodeGenerator;
@@ -17,14 +19,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Servicio que implementa el manejo de autenticación:
- * - Login real con validación de credenciales desde la base de datos
- * - Registro con encriptación de contraseña
- * - Generación de JWT con claims personalizados
- * - Listado de usuarios
- * - Funciones adicionales: obtener perfil, cambiar contraseña, desactivar usuario, validar token
- */
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -35,19 +29,19 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserCodeGenerator userCodeGenerator;
+    
 
-    public LoginResponse loginWithUserDetails(String username, String password) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
-
-        if (userOpt.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado");
-        }
-
-        User user = userOpt.get();
+    @Override
+    public String login(String username, String password) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Contraseña incorrecta");
@@ -57,33 +51,12 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Usuario inactivo");
         }
 
-        Map<String, Object> claims = Map.of("role", user.getRol());
-        String token = jwtUtil.generateToken(user.getUsername(), claims);
+        String roleName = user.getRole().getName();
 
-        return new LoginResponse(token, user.getUsername(), user.getUserCode());
+        // Generamos token con username, userCode y rol
+        return jwtUtil.generateToken(user.getUsername(), user.getUserCode(), roleName);
     }
 
-    @Override
-    public String login(String username, String password) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
-
-        if (userOpt.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado");
-        }
-
-        User user = userOpt.get();
-
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Contraseña incorrecta");
-        }
-
-        if (user.isActive() == false) {
-            throw new RuntimeException("Usuario inactivo");
-        }
-
-        Map<String, Object> claims = Map.of("role", user.getRol());
-        return jwtUtil.generateToken(user.getUsername(), claims);
-    }
 
     @Override
     public UserResponse register(UserRequest userRequest) {
@@ -93,44 +66,40 @@ public class AuthServiceImpl implements AuthService {
 
         String uniqueCode = userCodeGenerator.generateUniqueUserCode();
 
+        // Por defecto asignamos el rol USER al registrar
+        Role userRole = roleRepository.findByName("ROLE_USER")
+                .orElseThrow(() -> new RuntimeException("Role USER no encontrado"));
+
         User user = User.builder()
                 .username(userRequest.getUsername())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
-                .rol(userRequest.getRol())
+                .role(userRole)
                 .active(true)
                 .userCode(uniqueCode)
                 .build();
 
         userRepository.save(user);
 
-        return new UserResponse(user.getUserCode(),user.getUsername(),user.getRol(), user.isActive());
+        return new UserResponse(user.getUserCode(), user.getUsername(), user.getRole().getName(), user.isActive());
     }
-
 
     @Override
     public List<UserResponse> getUsers() {
         List<User> users = userRepository.findAll();
 
         return users.stream()
-                .map(user -> new UserResponse(user.getUserCode(), user.getUsername(), user.getRol(), user.isActive()))
+                .map(user -> new UserResponse(user.getUserCode(), user.getUsername(), user.getRole().getName(), user.isActive()))
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Obtener perfil de usuario por username
-     */
     @Override
     public UserResponse getProfile(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        return new UserResponse(user.getUserCode(), user.getUsername(), user.getRol(),user.isActive());
+        return new UserResponse(user.getUserCode(), user.getUsername(), user.getRole().getName(), user.isActive());
     }
 
-    /**
-     * Cambiar contraseña de usuario:
-     * Se valida la contraseña actual antes de cambiar.
-     */
     @Override
     public String changePassword(String username, ChangePasswordRequest request) {
         User user = userRepository.findByUsername(username)
@@ -158,10 +127,6 @@ public class AuthServiceImpl implements AuthService {
         return "Usuario " + (newStatus ? "activado" : "desactivado") + " exitosamente";
     }
 
-
-    /**
-     * Validar si el token es válido y no expiró
-     */
     @Override
     public boolean validateToken(String token) {
         try {
@@ -176,7 +141,33 @@ public class AuthServiceImpl implements AuthService {
     public UserResponse getUserByUserCode(String userCode) {
         User user = userRepository.findByUserCode(userCode)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return new UserResponse(user.getUserCode(), user.getUsername(), user.getRol(), user.isActive());
+        return new UserResponse(user.getUserCode(), user.getUsername(), user.getRole().getName(), user.isActive());
+    }
+
+    // ------------------ NUEVOS MÉTODOS PARA ROLES ------------------
+
+    /**
+     * Obtener todos los roles disponibles
+     */
+
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
+    }
+
+    /**
+     * Asignar un nuevo rol a un usuario (solo admins)
+     */
+    public String assignRoleToUser(String userCode, String roleName) {
+        User user = userRepository.findByUserCode(userCode)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+
+        user.setRole(role);
+        userRepository.save(user);
+
+        return "Rol " + roleName + " asignado al usuario " + user.getUsername() + " correctamente";
     }
 
 }
