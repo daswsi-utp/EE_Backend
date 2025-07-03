@@ -62,4 +62,12 @@ public class ImageUtil {
         }
     }
 
+    public String getImageUrl(String fileName) {
+        if (fileName == null || fileName.trim().isEmpty()) {
+            return null;
+        }
+        return "/api/images/" + fileName;
+    }
+
+
 }
