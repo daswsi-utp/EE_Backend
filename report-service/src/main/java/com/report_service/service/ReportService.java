@@ -844,6 +844,54 @@ public class ReportService {
         );
 
 
+        ArrayList<String> tags23 = new ArrayList<>();
+        tags23.add("Hogar");
+        tags23.add("Baño");
+        tags23.add("Ecológico");
+        tags23.add("Cero Residuos");
+        tags23.add("Cuidado Personal");
+        
+        ArrayList<String> highlights23 = new ArrayList<>();
+        highlights23.add("Exfoliación suave y natural");
+        highlights23.add("100% biodegradable y compostable");
+        highlights23.add("Estimula la circulación sanguínea");
+        highlights23.add("Ayuda a reducir la celulitis y suavizar la piel");
+        
+        ArrayList<Review> reviews23 = new ArrayList<>();
+        reviews23.add(new Review("Sofía Vargas", 4, "2025-06-10", "Me encanta cómo deja mi piel de suave. Al principio es un poco dura, pero se ablanda con el uso.", 3));
+        reviews23.add(new Review("Carlos Mendoza", 5, "2025-06-05", "Excelente alternativa a las esponjas de plástico. Muy efectiva y amigable con el ambiente.", 4));
+        
+        ArrayList<Integer> relatedProducts23 = new ArrayList<>();
+        relatedProducts23.add(1); // Jabón Artesanal de Avena
+        relatedProducts23.add(15); // Jabonera de Corcho Natural
+        
+        Product producto23 = new Product(
+                16,
+                "https://example.com/esponja-luffa.jpg",
+                "Esponja de Luffa Natural",
+                "Esponja exfoliante 100% natural y biodegradable, ideal para el cuidado corporal.",
+                "Disfruta de una experiencia de baño revitalizante con esta esponja de luffa natural. Perfecta para exfoliar suavemente la piel, remover células muertas, y estimular la circulación. Al ser un producto vegetal, es completamente biodegradable y una excelente opción para reducir el uso de plásticos en tu rutina de higiene personal.",
+                "Cuidado Personal",
+                6.50,
+                "0%",
+                4.5,
+                210,
+                180,
+                true,
+                "Luffa 100% Natural",
+                "15 cm de largo aprox. (forma irregular)",
+                "20 g",
+                "Beige/Natural",
+                "Enjuagar y colgar para secar después de cada uso. Reemplazar cada 3-4 semanas.",
+                "N/A", // No aplica garantía específica
+                "Egipto",
+                tags23,
+                highlights23,
+                reviews23,
+                relatedProducts23
+        );
+
+
         products.add(producto5);
         products.add(producto6);
         products.add(producto7);
@@ -862,7 +910,7 @@ public class ReportService {
         products.add(producto20);
         products.add(producto21);
         products.add(producto22);
-
+        products.add(producto23);
         return products;
     }
 
