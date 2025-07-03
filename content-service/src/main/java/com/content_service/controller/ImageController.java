@@ -92,5 +92,20 @@ public class ImageController {
         }
     }
 
-
+    private String getContentType(String fileName) {
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        switch (extension) {
+            case "jpg":
+            case "jpeg":
+                return "image/jpeg";
+            case "png":
+                return "image/png";
+            case "gif":
+                return "image/gif";
+            case "webp":
+                return "image/webp";
+            default:
+                return "application/octet-stream";
+        }
+    }
 }
