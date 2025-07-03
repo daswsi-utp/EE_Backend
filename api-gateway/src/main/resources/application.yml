@@ -28,6 +28,11 @@ spring:
           predicates:
             - Path=/orchestrator/**
 
+        - id: event-service
+          uri: lb://EVENT-SERVICE
+          predicates:
+            - Path=/events/**
+
         - id: product-service
           uri: lb://PRODUCT-SERVICE
           predicates:
