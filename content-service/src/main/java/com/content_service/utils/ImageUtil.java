@@ -69,5 +69,36 @@ public class ImageUtil {
         return "/api/images/" + fileName;
     }
 
+    private void validateImage(MultipartFile imageFile) {
+        if (imageFile == null || imageFile.isEmpty()) {
+            throw new IllegalArgumentException("El archivo de imagen no puede estar vacío");
+        }
+
+        // Validar tamaño
+        if (imageFile.getSize() > maxFileSize) {
+            throw new IllegalArgumentException("El archivo es demasiado grande. Máximo permitido: " +
+                    (maxFileSize / 1024 / 1024) + "MB");
+        }
+
+        // Validar tipo de contenido
+        String contentType = imageFile.getContentType();
+        if (contentType == null || !ALLOWED_CONTENT_TYPES.contains(contentType.toLowerCase())) {
+            throw new IllegalArgumentException("Tipo de archivo no permitido. Tipos permitidos: " +
+                    String.join(", ", ALLOWED_CONTENT_TYPES));
+        }
+
+        // Validar extensión
+        String originalFileName = imageFile.getOriginalFilename();
+        if (originalFileName == null) {
+            throw new IllegalArgumentException("Nombre de archivo inválido");
+        }
+
+        String extension = getFileExtension(originalFileName);
+        if (!ALLOWED_EXTENSIONS.contains(extension.toLowerCase())) {
+            throw new IllegalArgumentException("Extensión de archivo no permitida. Extensiones permitidas: " +
+                    String.join(", ", ALLOWED_EXTENSIONS));
+        }
+    }
+
 
 }
