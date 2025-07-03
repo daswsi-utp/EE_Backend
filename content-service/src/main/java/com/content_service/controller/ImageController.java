@@ -71,5 +71,26 @@ public class ImageController {
         }
     }
 
+    // Eliminar imagen
+    @DeleteMapping("/{fileName}")
+    public ResponseEntity<?> deleteImage(@PathVariable String fileName) {
+        try {
+            boolean deleted = imageUtil.deleteImage(fileName);
+            if (deleted) {
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "Imagen eliminada exitosamente");
+                return ResponseEntity.ok(response);
+            } else {
+                Map<String, String> error = new HashMap<>();
+                error.put("error", "Imagen no encontrada");
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Error al eliminar la imagen");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
 
 }
