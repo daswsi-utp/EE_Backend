@@ -49,4 +49,17 @@ public class ImageUtil {
         }
     }
 
+    public boolean deleteImage(String fileName) {
+        try {
+            if (fileName == null || fileName.trim().isEmpty()) {
+                return false;
+            }
+
+            Path imagePath = Paths.get(uploadDir, fileName);
+            return Files.deleteIfExists(imagePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al eliminar la imagen: " + e.getMessage(), e);
+        }
+    }
+
 }
