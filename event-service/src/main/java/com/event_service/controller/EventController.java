@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/events")
 public class EventController {
 
+    //:)
     private final EventService eventService;
 
     public EventController(EventService eventService) {
